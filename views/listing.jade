@@ -1,0 +1,91 @@
+extends includes/layout
+block title
+  | Listing Details
+block content
+ .container
+  .row
+    .col-md-9
+            h1= adContent.headline
+            hr
+            h2 Description
+            p= adContent.description
+            hr
+            h2 Photos
+            #photo-carousel.carousel.slide(data-ride="carousel")
+              ol.carousel-indicators
+                each photo, index in photos.photos
+                  if index == 0
+                    li.active(data-target="#photo-carousel", data-slide-to="#{index}")
+                  else
+                    li(data-target="#photo-carousel", data-slide-to="#{index}")
+              .carousel-inner(role="listbox")
+                each photo, index in photos.photos
+                  if index == 0
+                    .item.active
+                      img(src="#{photo.large.uri}")
+                      .carousel-caption photo x
+                  else
+                    .item
+                      img(src="#{photo.large.uri}")
+                      .carousel-caption photo x
+              a.left.carousel-control(href="#photo-carousel", role="button", data-slide="prev")
+                span.icon-chevron-left
+                span.sr-only Previous
+              a.right.carousel-control(href="#photo-carousel", role="button", data-slide="next")
+                span.icon-chevron-right
+                span.sr-only Next
+            h2 Location
+            if location
+              p= location.lat + ", " + location.lng
+
+            hr
+            h2 Features
+            if units[0].unitContent.features
+              p
+                each feature, i in units[0].unitContent.features
+                  | #{feature.description}
+                  if i < units[0].unitContent.features.length - 1
+                    | ,
+            hr
+            h2 Rates
+            each rate, periodType in units[0].ratePeriods[0].rates
+              h4= periodType + "(Min stay: " + units[0].ratePeriods[0].minimumStay + ")"
+              p= "Cost: " + rate.amount + " " + rate.currency
+            hr
+            h2 Review Summary
+            p= "Average Rating: " + units[0].reviewSummary.averageRating
+            p= "Review Count: " + units[0].reviewSummary.reviewCount
+            hr
+            h2 Reviews
+            table
+              each unitReview in units[0].unitReviewContent.unitReviews
+                tr
+                  h4= unitReview.headline
+                  p= "Name: " + unitReview.reviewerName
+                  p= unitReview.body
+                hr
+            form(method="get", action="/createReviewForm", role="form")
+              .form-group
+                input(type="hidden", name="headline" value="#{adContent.headline}")
+                input(type="hidden", name="unitId" value="#{units[0].unitNumber}")
+                input(type="hidden", name="listingId" value="#{listingId}")
+                input.form-control(type="submit", value="Create Review")
+    .col-md-3
+            h2 Book Now!!
+            form(method="get", action="/bookStay", role="form")
+              .form-group
+                label(for="book-arrival") Arrival Date
+                input#book-arrival.form-control(type="date", name="arrivalDate")
+              .form-group
+                label(for="book-departure") Departure Date
+                input#book-departure.form-control(type="date", name="departureDate")
+              .form-group
+                label(for="book-adults") Adults
+                input#book-adults.form-control(type="number", name="adultsCount", placeholder="# adults")
+              .form-group
+                label(for="book-children") Children
+                input#book-children.form-control(type="number", name="childrenCount", default="0", placeholder="# children")
+              .form-group
+                input(type="hidden", name="unitId" value="#{units[0].unitNumber}")
+                input(type="hidden", name="listingId" value="#{listingId}")
+                input.form-control(type="submit")

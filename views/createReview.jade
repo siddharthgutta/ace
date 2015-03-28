@@ -1,0 +1,30 @@
+extends includes/layout
+block title
+  | Write a review 
+block content
+ .container
+            h1= "Write A Review For Rental " + unitId
+            h2= headline
+  .row
+    .col-md-5
+            h2 Create a Review!!
+            form(method="post", action="/submitReview", role="form")
+              .form-group
+                label(for="review-headline") Write your review title
+                input#review-headline.form-control(type="text", name="headline")
+              .form-group
+                label(for="review-rating") Rate your stay
+                input#review-rating.form-control(type="number", name="rating")
+              .form-group
+                label(for="book-arrival") Arrival Date
+                input#book-arrival.form-control(type="date", name="arrivalDate")
+              .form-group
+                label(for="book-body") Write your review
+                input#book-arrival.form-control(type="textarea", name="body", rows="3")
+              .form-group
+                input(type="hidden", name="unitId" value="#{unitId}")
+                input(type="hidden", name="listingId" value="#{listingId}")
+                input.form-control(type="submit")
+    .col-md-5
+            h3 Tips for Writing Reviews
+            Detailed reviews help fellow travelers choose the perfect place to stay on vacation.

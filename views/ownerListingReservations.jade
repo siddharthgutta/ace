@@ -1,0 +1,89 @@
+extends includes/layout
+block title
+  | Listing Search Results
+block content
+    p
+    hr
+    p
+      = size
+      |  Results
+    div(id="custom-toolbar")
+      table.table
+        tr
+          td
+            form.form-inline(method="get", action="/myReservations")
+              .form-group
+                 input(type="hidden" name="listingId", value="#{listingId}")
+                 label(for="search-q") Reference Number:
+                 input#search-q.form-control(type="text", name="referenceNumber", placeholder="referenceNumber")
+          td
+            <b>Filter By</b>            
+            each filter in filters
+              .dropdown
+                button.btn.btn-default.dropdown-toggle(type="button" id="#{filter.name}" data-toggle="dropdown" aria-expanded="true").dropdown-toggle #{filter.name}
+                ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
+                  each link in filter.links
+                    li
+                      a(href=link.url, tabindex='-1') #{link.name}
+              script.
+                $('.dropdown-toggle').dropdown()
+     table.table.table-hover
+      thead
+        tr
+            th
+              | Dates
+              each sort in sortBy
+                if (sort.name == "beginDate")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | Status
+            th
+              | Payment Status
+            th
+              | Reference #
+            th
+              | Guest Conact
+            th
+              | Guest Profile
+        each hit in hits
+          tbody
+            tr
+                td
+                  | Check In: #{hit.reservationDates.beginDate}
+                  br
+                  | Check Out: #{hit.reservationDates.endDate}
+                td
+                  =hit.availabilityStatus
+                td
+                  =hit.reservationPaymentStatus
+                td
+                  =hit.reservationReferenceNumber
+                td
+                  | #{hit.contact.firstName} #{hit.contact.lastName}
+                  br
+                  | Phone: #{hit.contact.phone}
+                  br
+                  | Email: #{hit.contact.email}
+                td
+                  | Adults: #{hit.adults}
+                  br
+                  | Chilren: #{hit.children}
+                  br
+                  | Pets: #{hit.pets}
+    p
+      table
+        tr
+          td
+            if prevPage
+              a(href="#{prevPage}") Previous Page
+          td
+            if nextPage
+              a(href="#{nextPage}") Next Page

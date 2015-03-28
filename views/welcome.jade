@@ -1,0 +1,15 @@
+extends includes/layout
+block title
+    | Welcome To Express Demo
+block content
+        h1 Welcome
+        
+        if (email)
+            p= email
+        else
+            p "anonymous"
+        
+        p
+            a(href="/myListings?page=1") Get My Listings
+        p
+            a(href="/myInbox?page=1") Get My Inbox

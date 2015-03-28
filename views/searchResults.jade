@@ -1,0 +1,66 @@
+extends includes/layout
+block title
+  | Listing Search Results
+block content
+    table
+      tr
+        each region in refinements[0].options
+          td(width="200px")
+            a(href="#{region.url}") #{region.title} (#{region.count})
+    p
+    hr
+    p
+      = hitCount
+      |  Results
+
+    table
+        each hit in hits
+            tr
+                td
+                  if hit.thumbnail
+                    img(src="#{hit.thumbnail.secureUri}" width="#{hit.thumbnail.width}" height="#{hit.thumbnail.height}")
+                td
+                  h4
+                    a(href="#{hit.detailsUrl}") #{hit.headline}
+                  br
+                  =hit.accomodations
+                  br
+                  =hit.regionPath
+                  br
+                  if hit.reviewCount > 1
+                    - var starCount = Math.round(hit.reviewAverage)
+                    - var n = 0
+                    - for (var n = 0; n < starCount; n++)
+                        img(src="http://icons.iconarchive.com/icons/iconshock/christmas/24/star-icon.png")
+                    = '(' + hit.reviewCount + ')'
+                td
+                  if hit.priceRanges[0]
+                    =hit.priceRanges[0].from
+                    br
+                    if hit.priceRanges[0].periodType = 'NIGHTLY-WEEKDAY'
+                        |per night
+
+                    br
+                    if hit.bookWithConfidence == true
+                      img(src="http://csvcus-test.homeaway.com/rsrcs/EE/D343282184BE1A26667AF78AC8D2D3-BHS-sm.png")
+                    br
+                    if hit.minStayRange && hit.minStayRange.minStayLow > 1
+                      #{hit.minStayRange.minStayLow} night minimum stay
+                    br
+                    a(class='button', href="#{hit.detailsUrl}") Book It Now
+             tr
+               td(colspan=3)
+                 hr
+    p
+      table
+        tr
+          td
+            if prevPage
+              a(href="#{prevPage}") Previous Page
+            else
+              | Previous Page
+          td
+            if nextPage
+              a(href="#{nextPage}") Next Page
+            else
+              | Next Page

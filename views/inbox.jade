@@ -1,0 +1,83 @@
+extends includes/layout
+block title
+    | Inbox
+block content
+    p
+    hr
+    p
+        = size
+        |  Results
+    
+    label(for="before") Before
+    input#before(type="date", name="before")
+    
+    label(for="after") After
+    input#after(type="date", name="after")
+    a(tabindex='-1', id="date-filter") Filter by Date
+    .dropdown
+        button.btn.btn-default.dropdown-toggle(type="button" id="status" data-toggle="dropdown" aria-expanded="true").dropdown-toggle Filter status
+        ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
+            li
+                a(href="/myInbox?status=BLOCKED_RESERVATION", tabindex='-1') Blocked Reservations
+            li
+                a(href="/myInbox?status=BOOKING", tabindex='-1') Bookings
+            li
+                a(href="/myInbox?status=CANCELLED", tabindex='-1') Cancelled
+            li
+                a(href="/myInbox?status=RESERVATION", tabindex='-1') Reservations
+            li
+                a(href="/myInbox?status=REPLIED", tabindex='-1') Replied
+                
+    .dropdown
+        button.btn.btn-default.dropdown-toggle(type="button" id="filters" data-toggle="dropdown" aria-expanded="true").dropdown-toggle More filters
+        ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
+            li
+                a(href="/myInbox?inquiries=true", tabindex='-1') Inquiries
+            li
+                a(href="/myInbox?reservations=true", tabindex='-1') Reservations
+            li
+                a(href="/myInbox?archived=true", tabindex='-1') Archived
+            li
+                a(href="/myInbox?unreadOnly=true", tabindex='-1') Unread
+            li
+                a(href="/myInbox?unrepliedOnly=true", tabindex='-1') Unreplied
+
+    
+    script.
+        $('.dropdown-toggle').dropdown();
+        $('#date-filter').on('click', function(event) {
+            console.log('before: ' + $('#before').val());
+            console.log('after: ' + $('#after').val());
+            window.location.replace("https://localhost:3443/myInbox?beforeDate=" + $('#before').val() + "&afterDate=" + $('#after').val());
+        });
+
+    table.table.table-hover
+        thead
+            tr
+                th
+                    | From
+                th
+                    | Message
+                th
+                    | Date
+                th
+            each conversation in conversations
+                tbody
+                    tr
+                        td
+                            | #{conversation.lastMessage.from.firstName} #{conversation.lastMessage.from.lastName}
+                        td
+                            =conversation.lastMessage.message
+                        td
+                            =conversation.lastMessage.date
+                        td
+                            a(href="/conversation?id=" + conversation.id, tabindex='-1') More
+    p
+        table
+            tr
+                td
+                    if prevPage
+                        a(href="#{prevPage}") Previous Page
+                td
+                    if nextPage
+                        a(href="#{nextPage}") Next Page

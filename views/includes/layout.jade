@@ -1,0 +1,15 @@
+html
+    head
+        title: block title
+        include head
+    body
+        .container
+            nav.navbar.navbar-default
+                .container-fluid
+                    .navbar-header
+                        form.form-inline(method="get", action="/search")
+                            .form-group
+                                label(for="search-q") Search Listings:
+                                input#search-q.form-control(type="text", name="q", placeholder="Search Text")
+                                input.form-control(type="submit")
+            block content

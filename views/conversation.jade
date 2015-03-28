@@ -1,0 +1,43 @@
+extends includes/layout
+block title
+    | Inbox
+block content
+    p
+    hr
+    p
+        = message.length
+        |  Messages
+    
+    script.
+        $('.dropdown-toggle').dropdown();
+        $('#date-filter').on('click', function (event) {
+            console.log('before: ' + $('#before').val());
+            console.log('after: ' + $('#after').val());
+            window.location.replace("https://localhost:3443/myInbox?beforeDate=" + $('#before').val() + "&afterDate=" + $('#after').val());
+        });
+        
+    form(method="post", action="/addMessage?conversationId=" + id, role="form")
+        .form-group
+            label(for="message") New Message
+            textarea#review-headline.form-control(type="textarea", name="message")
+        .form-group
+            input.form-control(type="submit")
+
+    table.table.table-hover
+        thead
+            tr
+                th
+                    | Date
+                th
+                    | Message
+                th
+                    | Sender
+            each m in message
+                tbody
+                    tr
+                        td
+                            =m.date
+                        td
+                            =m.message
+                        td
+                            =m.from.role

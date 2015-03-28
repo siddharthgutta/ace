@@ -1,0 +1,168 @@
+extends includes/layout
+block title
+  | Listing Search Results
+block content
+    p
+    hr
+    p
+      = size
+      |  Results
+    div(id="custom-toolbar")
+      table.table
+        tr
+          td
+            form.form-inline(method="get", action="/myListings")
+              .form-group
+                 label(for="search-q") Address Contains:
+                 input#search-q.form-control(type="text", name="addressContains", placeholder="Search Text")
+          td
+            <b>Filter By</b>            
+            each filter in filters
+              .dropdown
+                button.btn.btn-default.dropdown-toggle(type="button" id="#{filter.name}" data-toggle="dropdown" aria-expanded="true").dropdown-toggle #{filter.name}
+                ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
+                  li
+                    a(href=filter.links[0].url, tabindex='-1') #{filter.links[0].name}
+                  li 
+                    a(href=filter.links[1].url, tabindex='-1') #{filter.links[1].name}
+              script.
+                $('.dropdown-toggle').dropdown()
+    table.table.table-hover
+      thead
+        tr
+            th
+              | Listing Id
+            th
+              | Status
+              | 
+              each sort in sortBy
+                if (sort.name == "status")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | Product Type                
+              | 
+              each sort in sortBy
+                if (sort.name == "productType")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | Search Tier
+              | 
+              each sort in sortBy
+                if (sort.name == "tierCode")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | Last Updated
+              | 
+              each sort in sortBy
+                if (sort.name == "updated")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | Property Name
+            th
+              | Address
+            th
+              | Start Date
+              | 
+              each sort in sortBy
+                if (sort.name == "subscriptionStart")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | End Date
+              | 
+              each sort in sortBy
+                if (sort.name == "subscriptionEnd")
+                  if (sort.urlNone)
+                    a(href = sort.urlNone)
+                      img(src="/images/stop.png")
+                  if (sort.urlAsc)
+                    a(href = sort.urlAsc)
+                      img(src="/images/up_arrow.png")
+                  if (sort.urlDesc)
+                    a(href = sort.urlDesc)
+                      img(src="/images/down_arrow.png")
+            th
+              | More Information
+        each hit in hits
+          tbody
+            tr
+                td
+                  =hit.listingId
+                td
+                  =hit.status
+                td
+                  =hit.productType
+                td
+                  =hit.tierCode
+                td
+                  =hit.lastUpdated
+                td
+                  =hit.propertyName
+                td
+                  =hit.location.addressLine1
+                  br
+                  =hit.location.addressLine2
+                  br
+                  =hit.location.addressLine3
+                  br
+                  =hit.location.addressLine4
+                  br
+                  =hit.location.addressLine5
+                  br
+                  =hit.location.country
+                  br
+                  =hit.location.postalCode
+                td
+                  =hit.subscriptionStartDate
+                td
+                  =hit.subscriptionEndDate
+                td
+                  a(href = "/myReservations?listingId=#{hit.listingId}") Reservations
+    p
+      table
+        tr
+          td
+            if prevPage
+              a(href="#{prevPage}") Previous Page
+          td
+            if nextPage
+              a(href="#{nextPage}") Next Page
